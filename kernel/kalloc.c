@@ -69,7 +69,7 @@ kfree(void *pa)
 }
 
 void * 
-steal(){
+steal(){    //偷一个空的内存
   struct run * r=0;
   for(int i=0;i<NCPU;i++){
     if(holding(&kmems[i].lock)){    //避免冲突
@@ -78,7 +78,7 @@ steal(){
     acquire(&kmems[i].lock);
     if(kmems[i].freelist!=0){
       r=kmems[i].freelist;
-      kmems[i].freelist=r->next;
+      kmems[i].freelist=r->next;  //更新表头
       release(&kmems[i].lock);
       return (void *)r;
     }
